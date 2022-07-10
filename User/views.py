@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.contrib.auth import login, logout
 from User.models import MusallaUser
 from .forms import LoginForm, SignupForm
+from django.contrib.auth.forms import UserChangeForm
 
 def login_view(request):
     form = LoginForm()
@@ -12,9 +13,9 @@ def login_view(request):
             user = form.save()
             if user:
                 login(request, user)
-                return HttpResponse("Fuck")
+                return redirect("Quiz:home-page")
             else:
-                return HttpResponse("Fuck me")
+                return render(request, "login.html", {"login_form":form})
     context = {"login_form": form}
     return render(request, "login.html", context)
 
@@ -27,6 +28,11 @@ def signup_view(request):
             user = form.save()
             return HttpResponse("Fuck")
         else:
-            return HttpResponse("Fuck me")
+            return render(request, "signup.html", {"signup_form":form})
     context = {"signup_form": form}
     return render(request, "signup.html", context)
+
+
+def logout_view(request):
+    logout(request)
+    return redirect("Quiz:home-page")

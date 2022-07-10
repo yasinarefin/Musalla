@@ -108,6 +108,6 @@ class SignupForm(UserCreationForm):
     @transaction.atomic
     def save(self):
         # print(self.cleaned_data)
-        user = super().save(commit=False)
+        user = super().save(commit=False) # gets a model object with the form data so that extra data can be added later
         user.save()
         return True
