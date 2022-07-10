@@ -12,7 +12,7 @@ $(document).ready(function(){
 
         try{
 
-        for(let i = 0; i < $("#questions").children().length; i+=2){
+        for(let i = 0; i < $("#questions").children().length; i++){
             
             var element = $("#questions").children().eq(i);
 
@@ -20,7 +20,8 @@ $(document).ready(function(){
             cur_ques["id"] = parseInt( element.attr("data-question-id"));
             cur_ques["question_type"] = element.attr("data-question-type");
             cur_ques["question_text"] = element.children().eq(0).children().eq(1).val();
-            cur_ques["points"] = parseInt(element.children().eq(0).children().eq(0).children().eq(1).children().eq(1).val());
+            //cur_ques["points"] = parseInt(element.children().eq(0).children().eq(0).children().eq(1).children().eq(1).val());
+            cur_ques["points"] = parseInt(element.find("[data-input-name='points']").val());
             cur_ques["options"] = [];
             cur_ques["answer"] = [];
             
@@ -76,12 +77,10 @@ $(document).ready(function(){
             success: function( data, textStatus, jQxhr ){
                 var q_el = $question_element.clone();
                 q_el.attr("data-question-id", data["id"]);
-                q_el.children().first().children().first().children().first().html(`Question`);
-                if($("#questions").children().length > 0){
-                    $("#questions").append(`<div class="border-top my-3"></div>`);
-                }
+                // q_el.children().first().children().first().children().first().html(`Question`);
                 
                 $("#questions").append(q_el);
+                
                 q_count++;
             },
             error: function( jqXhr, textStatus, errorThrown ){
@@ -119,9 +118,9 @@ $(document).ready(function(){
         var clickedBtn = $(this);
         var parentContainer = clickedBtn.parent().parent();
         var option = $option_element.clone();
-        
-        option.children().eq(1).children().first().html( `Option`);
-        option.children().eq(0).attr("name", `question-${q_count}-radio`)
+
+        question_idx =clickedBtn.parent().parent().index(); 
+        option.children().eq(0).attr("name", `question-${question_idx}-radio`)
         parentContainer.children().eq(1).append(option);
         
     });

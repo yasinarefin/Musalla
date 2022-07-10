@@ -7,6 +7,8 @@ from Quiz.models import *
 from .forms import *
 import json
 from django.utils.dateparse import parse_datetime
+
+
 # Create your views here.
 
 def quiz_form_validator(field_values):
@@ -77,12 +79,17 @@ def questions_view(request, quiz_id):
 
     if request.method == "POST":
         questions_arr = json.loads(request.POST.get("questions"))
-        
+
         for question in questions_arr:
+            if Question.objects.get(id=question["id"]).quiz != quiz_obj:
+                break
             Question.objects.filter(id=question["id"]).update(**question)
         return HttpResponse(json.dumps({"msg":"ok"}), content_type="application/json",status=200)
 
-    return render(request, "questions.html", {"quiz_id":quiz_id})
+
+    return render(request, "questions.html", {"quiz_id":quiz_id,
+    "quiz_name": quiz_obj.name,
+     "questions" : Question.objects.filter(quiz=quiz_obj)})
 
 
 # rest api endpoint to add question
