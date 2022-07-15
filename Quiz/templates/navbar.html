@@ -1,0 +1,91 @@
+<!-- navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light py-3 sticky-top">
+    <div class="container">
+        <a href="#" class="navbar-brand">Musalla</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu">
+            <span class="navbar-toggler-icon"></span>
+       </button>
+       <div id="navmenu" class="collapse navbar-collapse">
+           <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+                <a href="/create/new/" class="nav-link"><strong>Create quiz</strong> </a>
+            </li>
+
+            <li class="nav-item">
+                <!-- <a href="/quiz/category/all/" class="nav-link">Browse</a> -->
+
+                
+                <div class="dropdown">
+                    <a class="dropdown-toggle nav-link text-dark"  id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+                      Browse
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+                      {%for category in categories%}
+                      <li><a class="dropdown-item" href="/quiz/category/{{category.id}}/">{{category.name}}</a></li>
+                      {%endfor%}
+                    </ul>
+                </div>
+            </li>
+
+            
+            
+            
+
+           {% if user.is_authenticated %}
+            <li class="nav-item d-none d-md-block mx-3">
+
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                        {{user.username}}
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <li><a class="dropdown-item" href="/user/dashboard/creation/">Dashboard</a></li>
+                        <li><a class="dropdown-item" href="/user/logout/">Logout</a></li>
+                      </ul>
+                </div>
+                <!-- <div class="dropdown">
+                    <a class="dropdown-toggle nav-link text-dark"  id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                      {{user.username}}
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                      <li><a class="dropdown-item" href="/user/dashboard/creation/">Dashboard</a></li>
+                      <li><a class="dropdown-item" href="/user/logout/">Logout</a></li>
+                    </ul>
+                </div> -->
+            
+            </li>  
+            <li class="nav-item d-sm-none">
+                <a href="/user/dashboard/" class="nav-link">Dashboard</a>
+            </li>
+            <li class="nav-item d-sm-none">
+                <a href="/user/logout/" class="nav-link">Logout</a>
+            </li>
+            {%else%}
+            <li class="nav-item">
+                <a href="/user/signup" class="nav-link">Signup</a>
+            </li>
+
+            <li class="nav-item">
+                <a href="/user/login" class="nav-link">Login</a>
+            </li>
+
+            {%endif%}
+
+
+            <li class="nav-item">
+                <form action="/quiz/search/" class="form-inline my-2 my-lg-0">
+                    <div class="input-group">
+                     <input class="form-control mr-sm-2" name="q" type="search" placeholder="Search quiz by id" aria-label="Search">
+                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                    </div>
+                 
+               </form>
+            </li>
+
+           </ul>
+
+           
+       </div>
+    </div>
+    
+</nav>

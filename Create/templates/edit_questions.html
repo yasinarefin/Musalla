@@ -88,7 +88,7 @@
                         <div class="input-group mb-3 input-group-sm">
                             <span class="input-group-text">Option</span>
                             <input type="text" class="form-control" value="{{option}}">
-                            <button class="btn btn-warning" data-btype="delete-option">Remove</button>
+                            <button class="btn btn-outline-danger" data-btype="delete-option"><i class="bi bi-trash"></i></button>
                          </div>
                     </div>
                     {%endfor%}
@@ -120,7 +120,7 @@
                     <label class="h5 text-primary" for="exampleFormControlTextarea1">Single choice</label>
                     <div class="d-flex align-items-center justify-content-end">
                         <label class="text-secondary">Points: </label>
-                        <input class="form-control w-50" placeholder="enter points" type="number">
+                        <input class="form-control w-50" data-input-name="points" placeholder="enter points" type="number">
                     </div>
                     
                 </div>
@@ -142,7 +142,7 @@
             <div class="input-group mb-3 input-group-sm">
                 <span class="input-group-text">Option</span>
                 <input type="text" class="form-control">
-                <button class="btn btn-warning" data-btype="delete-option">Remove</button>
+                <button class="btn btn-outline-danger" data-btype="delete-option"><i class="bi bi-trash"></i></button>
              </div>
         </div>
 

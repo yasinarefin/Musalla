@@ -4,5 +4,5 @@ from Quiz.views import *
 
 app_name = "Quiz"
 urlpatterns = [
-    path('', home_view, name="home-page"),
+    path('category/<int:id>/', category_view, name="category-page"),
 ]

@@ -5,6 +5,7 @@ from User.models import MusallaUser
 from Quiz.models import *
 from .forms import LoginForm, SignupForm
 from django.contrib.auth.forms import UserChangeForm
+from django.urls import reverse
 
 def login_view(request):
     form = LoginForm()
@@ -14,7 +15,7 @@ def login_view(request):
             user = form.save()
             if user:
                 login(request, user)
-                return redirect("Quiz:home-page")
+                return redirect(request.GET.get('next',"/"))
             else:
                 return render(request, "login.html", {"login_form":form})
     context = {"login_form": form}
@@ -36,7 +37,7 @@ def signup_view(request):
 
 def logout_view(request):
     logout(request)
-    return redirect("Quiz:home-page")
+    return redirect("/")
 
 
 def dashboard_view(request):
@@ -46,11 +47,10 @@ def dashboard_creation_view(request):
     if request.user.is_authenticated == False:
         return redirect("User:login")
 
-    for i in  Quiz.objects.filter(creator=request.user):
-        print(i)
 
     context ={
-        "created_quizzes" : Quiz.objects.filter(creator=request.user)
+        "created_quizzes" : Quiz.objects.filter(creator=request.user),
+        "categories":Category.objects.all()
     }
 
     return render(request, "dashboard_creation.html", context)

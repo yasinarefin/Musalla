@@ -45,25 +45,7 @@
             </form>
             <div>
                 {%for quiz in created_quizzes%}
-                  <div class="card my-2 bg-light mx-auto">
-
-                    <div class="card-header h5">
-                        {{quiz.name}} ({{quiz.id}})
-                    </div>
-                    <p>Start time: {{quiz.start_time}}</p>
-                    <p>End time: {{quiz.end_time}}</p>
-                    <p>Visibility: {{quiz.visibility}}</p>
-                    <p>Category: {{quiz.category}}</p>
-                    <div class="card-body">
-                        
-                        <div class="d-flex justify-content-end">
-                            <a href="/create/{{quiz.id}}/questions" class="btn btn-primary mx-3">Allowed users</a>
-                            <a href="/create/{{quiz.id}}/questions" class="btn btn-primary">Change</a>
-                        </div>
-                        
-                    </div>
-                  </div>
-                    
+                    {%include "quiz_card.html" %}
                 {%endfor%}
 
             </div>

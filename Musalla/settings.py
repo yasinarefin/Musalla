@@ -40,7 +40,10 @@ INSTALLED_APPS = [
     'User',
     'Quiz',
     'Create',
+    'Participate',
+    
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

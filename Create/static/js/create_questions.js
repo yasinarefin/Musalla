@@ -10,46 +10,43 @@ $(document).ready(function(){
         question_arr = [];
         //alert($("#questions").children().length);
 
-        try{
-
         for(let i = 0; i < $("#questions").children().length; i++){
             
             var element = $("#questions").children().eq(i);
 
-            cur_ques = {};
-            cur_ques["id"] = parseInt( element.attr("data-question-id"));
-            cur_ques["question_type"] = element.attr("data-question-type");
-            cur_ques["question_text"] = element.children().eq(0).children().eq(1).val();
-            //cur_ques["points"] = parseInt(element.children().eq(0).children().eq(0).children().eq(1).children().eq(1).val());
-            cur_ques["points"] = parseInt(element.find("[data-input-name='points']").val());
-            cur_ques["options"] = [];
-            cur_ques["answer"] = [];
-            
-            element.children().eq(1).children().each(
-                function(idx, element2){
-                    // remember to wrap element2 with $(), otherwise it is interpreted as DOM element
-                    // when iterating childrens
-                    var tem = $(element2).children().eq(1).children().eq(1).val();
-                    cur_ques["options"].push(tem);
-                    if($(element2).children().eq(0).is(":checked")){
-                        cur_ques["answer"].push(idx);
+            if(element.attr("data-question-type")==='single_choice'){
+                cur_ques = {};
+                cur_ques["id"] = parseInt( element.attr("data-question-id"));
+                cur_ques["question_type"] = element.attr("data-question-type");
+                cur_ques["question_text"] = element.children().eq(0).children().eq(1).val();
+                //cur_ques["points"] = parseInt(element.children().eq(0).children().eq(0).children().eq(1).children().eq(1).val());
+                cur_ques["points"] = parseInt(element.find("[data-input-name='points']").val());
+                alert(cur_ques["points"]);
+                cur_ques["options"] = [];
+                cur_ques["answer"] = [];
+                
+                element.children().eq(1).children().each(
+                    function(idx, element2){
+                        // remember to wrap element2 with $(), otherwise it is interpreted as DOM element
+                        // when iterating childrens
+                        var tem = $(element2).children().eq(1).children().eq(1).val();
+                        cur_ques["options"].push(tem);
+                        if($(element2).children().eq(0).is(":checked")){
+                            cur_ques["answer"].push(idx);
+                        }
                     }
-                }
-            );
-            // alert(cur_ques["question_type"]);
-           // alert(cur_ques["question_text"]);
+                );
+                // alert(cur_ques["question_type"]);
+            // alert(cur_ques["question_text"]);
 
-            // cur_ques["options"].forEach(function (item, index) {
-            //     alert(item);
-            // });
+                // cur_ques["options"].forEach(function (item, index) {
+                //     alert(item);
+                // });
 
-            question_arr.push(cur_ques);
+                question_arr.push(cur_ques);
+            }
 
             
-            
-        }
-    }catch(err){
-            alert(err);
         }
        // alert(JSON.stringify(question_arr));
         $.ajax({

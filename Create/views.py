@@ -7,7 +7,7 @@ from Quiz.models import *
 from .forms import *
 import json
 from django.utils.dateparse import parse_datetime
-
+from django.urls import reverse
 
 # Create your views here.
 
@@ -39,7 +39,8 @@ def quiz_form_validator(field_values):
 def createnew_view(request):
 
     if request.user.is_authenticated == False:
-        return redirect("User:login")
+        return redirect(f"{reverse('User:login')}?next={request.path}")
+        
     field_values = {}
     fields = [ "name", "start_time", "end_time", "category", "visibility"]
     errors=[]
@@ -69,9 +70,9 @@ def createnew_view(request):
     return  render(request, "create_new.html",context)
 
 
-def questions_view(request, quiz_id):
+def edit_questions_view(request, quiz_id):
     if request.user.is_authenticated == False:
-        return redirect("User:login")
+        return redirect(f"{reverse('User:login')}?next={request.path}")
     quiz_obj = Quiz.objects.get(id = quiz_id)
     
     if quiz_obj.creator != request.user:
@@ -87,7 +88,7 @@ def questions_view(request, quiz_id):
         return HttpResponse(json.dumps({"msg":"ok"}), content_type="application/json",status=200)
 
 
-    return render(request, "questions.html", {"quiz_id":quiz_id,
+    return render(request, "edit_questions.html", {"quiz_id":quiz_id,
     "quiz_name": quiz_obj.name,
      "questions" : Question.objects.filter(quiz=quiz_obj)})
 
@@ -139,3 +140,5 @@ def delete_question_view(request, quiz_id):
             json.dumps({"msg":"ok"}),
             content_type="application/json",
             status=200)
+
+

@@ -8,74 +8,13 @@
     {% load static %}
     <body>
         
-        <!-- navbar -->
-        <nav class="navbar navbar-expand-lg navbar-light bg-light py-3 sticky-top">
-            <div class="container">
-                <a href="#" class="navbar-brand">Musalla</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu">
-                    <span class="navbar-toggler-icon"></span>
-               </button>
-               <div id="navmenu" class="collapse navbar-collapse">
-                   <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a href="/quiz/category/all/" class="nav-link">Browse by category</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a href="/create/new/" class="nav-link">Create quiz</a>
-                    </li>
-                    
-                    {% if user.is_authenticated %}
-                    <li class="nav-item d-none d-md-block">
-                        <div class="dropdown">
-                            <a class="dropdown-toggle nav-link text-dark"  id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                              {{user.username}}
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                              <li><a class="dropdown-item" href="/user/dashboard/creation/">Dashboard</a></li>
-                              <li><a class="dropdown-item" href="/user/logout/">Logout</a></li>
-                            </ul>
-                        </div>
-                    
-                    </li>  
-                    <li class="nav-item d-sm-none">
-                        <a href="/user/dashboard/" class="nav-link">Dashboard</a>
-                    </li>
-                    <li class="nav-item d-sm-none">
-                        <a href="/user/logout/" class="nav-link">Logout</a>
-                    </li>
-                    {%else%}
-                    <li class="nav-item">
-                        <a href="/user/signup" class="nav-link">Signup</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a href="/user/login" class="nav-link">Login</a>
-                    </li>
-
-                    {%endif%}
-                       
-                       
-   
-                   </ul>
-
-                   <form action="/quiz/search/" class="form-inline my-2 my-lg-0">
-                       <div class="input-group">
-                        <input class="form-control mr-sm-2" name="q" type="search" placeholder="Search quiz by id" aria-label="Search">
-                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                       </div>
-                    
-                  </form>
-               </div>
-            </div>
-            
-        </nav>
-        
+        {%include "navbar.html"%}
+                
         <section class="text-dark pt-lg-5 p-5 p-lg-0 text-center text-sm-start">
             <div class="container">
                 <div class="d-sm-flex align-items-center justify-content-between">
                     <div>
-                        <h1>Have fun through
+                        <h1>Learn through
                             <span class="text-warning">Quiz</span>
                         </h1>
                         <p class="lead">
@@ -83,8 +22,6 @@
                         </p>
 
                         <a href="/user/signup" class="btn btn-success btn-lg my-4" role="button">Sign up now</a>
-
-                        
 
                     </div>
                     <img class="img-fluid w-25 d-none d-sm-block mb-3" src="{% static 'img/quiz_pic.jpg' %}" alt="">
@@ -102,9 +39,11 @@
                         <img src="{%static 'img/learning_subjects.png' %}" class="img-fluid" alt="funda">
                      </div>
                      <div class="col-md">
-                        <h2>Learn Fundamentals</h2>
+                        <h2>Learn Various Subjects</h2>
                         <p class="lead">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore, perferendis natus tempore vel, sunt quo omnis ullam ipsam veniam repellat harum? Quos aliquid nihil a voluptate velit repudiandae vitae officiis.
+                            Our site has quizzes on various categories.
+                            You can choose any subject you like and 
+                            participate in quizzes on those subjects.
 
                         </p>
                         <a href="#" class="btn btn-light">
@@ -256,17 +195,9 @@
                 </div>
             </div>
         </section>
-
-        <footer class="p-5 bg-dark text-white text-center position-relative">
-            <div class="container">
-                <p class="lead">Copyright &copy; 2021 frontend bootcamp</p>
-                <a href="#" class="position-absolute bottom-0 end-0 p-5">
-                    
-                    <i class="bi bi-arrow-up-circle h1"></i>
-                </a>
-            </div>
-
-        </footer>
+        
+        {%include 'footer.html'%}
+        
         
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>

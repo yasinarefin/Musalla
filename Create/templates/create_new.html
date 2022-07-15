@@ -28,17 +28,17 @@
                         {% csrf_token %}
 
                         <div class="form-group">
-                            <label for="quiz-name">Quiz id</label>
+                            <label for="quiz-name">Quiz Name</label>
                             <input type="text" value="{{quiz_create_form.name}}" class="form-control" name="name" id="quiz-name" placeholder="Enter email">
                         </div>
                         
                         <div class="form-group">
-                            <label for="start-time">Quiz id</label>
+                            <label for="start-time">Quiz Start Time</label>
                             <input type="datetime-local" value="{{quiz_create_form.start_time}}" class="form-control" name="start_time" id="start-time" placeholder="Enter email">
                         </div>
 
                         <div class="form-group mb-3">
-                            <label for="end-time">Quiz id</label>
+                            <label for="end-time">Quiz End Time</label>
                             <input type="datetime-local" value="{{quiz_create_form.end_time}}" class="form-control" name="end_time" id="end-time" placeholder="Enter email">
                         </div>
                        
@@ -70,4 +70,3 @@
 
     </body>
 </html>
-    

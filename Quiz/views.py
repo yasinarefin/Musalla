@@ -10,4 +10,12 @@ from django.utils.dateparse import parse_datetime
 
 
 def home_view(request):
-    return render(request, "index.html")
+    return render(request, "index.html", {
+        "categories":Category.objects.all()
+    })
+
+def category_view(request, id):
+    return render(request, "category.html", {
+        "quizzes": Quiz.objects.filter(category=id),
+        "categories":Category.objects.all()
+    })
