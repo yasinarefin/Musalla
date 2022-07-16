@@ -1,5 +1,6 @@
 from django.db import models
 from User.models import MusallaUser
+from django.utils import timezone
 # Create your models here.
 
 class Category(models.Model):
@@ -15,6 +16,15 @@ class Quiz(models.Model):
     category = models.ForeignKey(Category, models.CASCADE)
     visibility = models.CharField(max_length=7)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def get_status(self):
+        if self.start_time > timezone.now():
+            return 'upcoming'
+        elif self.end_time < timezone.now():
+            return 'ended'
+        else:
+            return 'running'
 
 
 

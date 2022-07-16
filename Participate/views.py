@@ -8,8 +8,10 @@ from Participate.models import *
 import json
 from django.utils.dateparse import parse_datetime
 from django.urls import reverse
-
+import datetime as dt
+from django.utils import timezone
 from dateutil.relativedelta import relativedelta
+from django.db.models import Sum
 
 # Create your views here.
 
@@ -25,17 +27,26 @@ def questions_view(request, quiz_id):
         except:
             return HttpResponse("Not authorized for this quiz", status=401) 
 
-    
+    # first_time = dt.datetime().now()
+    # later_time = dt.datetime(quiz_obj.end_time) 
+    # difference = later_time - first_time
+
     return render(request, "view_questions.html", {
         "questions": Question.objects.filter(quiz=quiz_id),
+        "submitted_answers" : Submission.objects.filter(quiz=quiz_obj, user=request.user),
         "quiz": quiz_obj,
-        "time_remaining": relativedelta(quiz_obj.end_time, quiz_obj.start_time)
+        "points": Submission.objects.filter(quiz=quiz_obj, user=request.user).aggregate(Sum("points"))["points__sum"],
+        "time_remaining": (quiz_obj.end_time - timezone.now()).seconds
     })
 
 #rest endpoint
 def submit_view(request, question_id):
     if request.user.is_authenticated == False:
-        return HttpResponse(json.dumps({"msg":"Not authorized"}), content_type="application/json",status=401)
+        return HttpResponse(
+            json.dumps({"msg":"Not authorized"}), 
+            content_type="application/json",
+            status=401
+        )
     
     question_obj = Question.objects.get(id=question_id)
     quiz_obj = Quiz.objects.get(id=question_obj.quiz.id)
@@ -47,6 +58,20 @@ def submit_view(request, question_id):
                 content_type="application/json",
                 status=401
             )
+    
+    if quiz_obj.get_status in ['upcoming', 'ended']:
+        return HttpResponse(
+            json.dumps({"msg":"Quiz is not running"}),
+            content_type="application/json",
+            status = 401
+        )
+
+    if Submission.objects.filter(user=request.user, question=question_obj).exists():
+        return HttpResponse(
+            json.dumps({"msg":"Already submiited"}),
+            content_type="application/json",
+            status = 401
+        )
 
     if request.method == "POST":
         answer = json.loads(request.POST.get("answer"))
@@ -78,16 +103,15 @@ def submit_view(request, question_id):
 class ValidateAnswer():
     def __init__(self, answer, question_obj):
         self.answer = answer
-        print(self.answer)
         self.question_obj = question_obj
         self.isValid = False
+        self.points = 0
 
         if question_obj.question_type == "single_choice":
             if self.validate_single_choice():
                 self.isValid = True
 
     def validate_single_choice(self):
-        print("loko", len(self.answer))
         if len(self.answer) == 1 and self.answer[0] < len(self.question_obj.options):
             if self.answer[0] == self.question_obj.answer[0]:
                 self.points = self.question_obj.points
