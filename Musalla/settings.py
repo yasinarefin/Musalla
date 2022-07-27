@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'Quiz',
     'Create',
     'Participate',
+    'Stats',
     
 ]
 

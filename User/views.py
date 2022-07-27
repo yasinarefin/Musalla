@@ -28,7 +28,7 @@ def signup_view(request):
         form = SignupForm(data = request.POST)
         if form.is_valid():
             user = form.save()
-            return HttpResponse("Fuck")
+            return HttpResponse("Done")
         else:
             return render(request, "signup.html", {"signup_form":form})
     context = {"signup_form": form}

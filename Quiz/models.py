@@ -14,7 +14,18 @@ class Quiz(models.Model):
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     category = models.ForeignKey(Category, models.CASCADE)
-    visibility = models.CharField(max_length=7)
+
+    PUBLIC = 'public'
+    PRIVATE = 'private'
+    VISIBILITY_CHOICES = [
+        (PUBLIC, 'public'),
+        (PRIVATE, 'private'),
+    ]
+    visibility = models.CharField(
+        max_length=7,
+        choices=VISIBILITY_CHOICES,
+        default=PUBLIC
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     @property

@@ -9,17 +9,12 @@
     <p>Visibility: {{quiz.visibility}}</p>
     <p>Category: {{quiz.category}}</p>
     <div class="card-body">
-        {%if quiz.creator == user%}
-        
-        <div class="d-flex justify-content-end">
-            <a href="{% url 'Create:edit-questions' quiz_id=quiz.id %}" class="btn btn-primary mx-3">Allowed users</a>
-            <a href="{% url 'Create:edit-questions' quiz_id=quiz.id %}" class="btn btn-primary">Change</a>
-        </div>
-        {%else%}
+
         <div class="d-flex justify-content-end">
             <a href="{%url 'Participate:view-questions' quiz_id=quiz.id%}" class="btn btn-primary mx-3">Participate</a>
-        </div> 
-        {%endif%}
-        
+            {%if quiz.creator == user%}
+            <a href="{% url 'Create:edit-questions' quiz_id=quiz.id %}" class="btn btn-primary">Change</a>
+            {%endif%}
+        </div>
     </div>
   </div>

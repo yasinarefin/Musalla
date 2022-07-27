@@ -23,54 +23,70 @@ def questions_view(request, quiz_id):
 
     if quiz_obj.visibility == 'private':
         try:
-            AllowedUser.objects.get(quiz=quiz_obj, user=request.user)
+            AllowedUser.objects.get(
+                quiz=quiz_obj,
+                user=request.user
+            )
         except:
-            return HttpResponse("Not authorized for this quiz", status=401) 
+            return HttpResponse(
+                "Not authorized for this quiz",
+                status=401
+            )
 
     # first_time = dt.datetime().now()
-    # later_time = dt.datetime(quiz_obj.end_time) 
+    # later_time = dt.datetime(quiz_obj.end_time)
     # difference = later_time - first_time
+
+
+    #print(max((quiz_obj.end_time - timezone.now()).total_seconds(),0))
+
+    if quiz_obj.get_status == "upcoming":
+        return render(request, "upcoming_quiz.html", {
+            "quiz":quiz_obj,
+            "time_remaining":max((quiz_obj.start_time - timezone.now()).total_seconds(),0)
+        })
 
     return render(request, "view_questions.html", {
         "questions": Question.objects.filter(quiz=quiz_id),
-        "submitted_answers" : Submission.objects.filter(quiz=quiz_obj, user=request.user),
+        "submitted_answers": Submission.objects.filter(quiz=quiz_obj, user=request.user),
         "quiz": quiz_obj,
         "points": Submission.objects.filter(quiz=quiz_obj, user=request.user).aggregate(Sum("points"))["points__sum"],
-        "time_remaining": (quiz_obj.end_time - timezone.now()).seconds
+        "time_remaining": max((quiz_obj.end_time - timezone.now()).total_seconds(),0)
     })
 
-#rest endpoint
+# rest endpoint
+
 def submit_view(request, question_id):
     if request.user.is_authenticated == False:
         return HttpResponse(
-            json.dumps({"msg":"Not authorized"}), 
+            json.dumps({"msg": "Not authorized"}),
             content_type="application/json",
             status=401
         )
-    
+
     question_obj = Question.objects.get(id=question_id)
     quiz_obj = Quiz.objects.get(id=question_obj.quiz.id)
 
     if quiz_obj.visibility == "private":
         if AllowedUser.objects.filter(quiz=quiz_obj, user=request.user).exists() == False:
             return HttpResponse(
-                json.dumps({"msg":"Not authorized for this quiz"}),
+                json.dumps({"msg": "Not authenticated for this quiz"}),
                 content_type="application/json",
-                status=401
+                status=403
             )
-    
+
     if quiz_obj.get_status in ['upcoming', 'ended']:
         return HttpResponse(
-            json.dumps({"msg":"Quiz is not running"}),
+            json.dumps({"msg": "Quiz is not running"}),
             content_type="application/json",
-            status = 401
+            status=403
         )
 
     if Submission.objects.filter(user=request.user, question=question_obj).exists():
         return HttpResponse(
-            json.dumps({"msg":"Already submiited"}),
+            json.dumps({"msg": "Already submitted"}),
             content_type="application/json",
-            status = 401
+            status=208
         )
 
     if request.method == "POST":
@@ -81,20 +97,20 @@ def submit_view(request, question_id):
         if validator.isValid:
             Submission.objects.create(
                 user=request.user,
-                 quiz=quiz_obj,
-                 question=question_obj,
-                 answer=answer,
-                 points=validator.points
+                quiz=quiz_obj,
+                question=question_obj,
+                answer=answer,
+                points=validator.points
             )
         else:
             return HttpResponse(
-                json.dumps({"msg":"Invalid submission"}),
+                json.dumps({"msg": "Invalid submission"}),
                 content_type="application/json",
-                status=200
+                status=406
             )
 
         return HttpResponse(
-            json.dumps({"msg":"Submitted"}),
+            json.dumps({"msg": "Submitted"}),
             content_type="application/json",
             status=200
         )
@@ -117,9 +133,3 @@ class ValidateAnswer():
                 self.points = self.question_obj.points
             return True
         return False
-
-    
-
-
-    
-

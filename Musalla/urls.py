@@ -24,6 +24,7 @@ urlpatterns = [
     path('create/', include("Create.urls")),
     path('quiz/', include("Quiz.urls")),
     path('participate/', include("Participate.urls")),
+    path('stats/', include("Stats.urls")),
     path('', home_view, name="home-page"),
     
 ]
