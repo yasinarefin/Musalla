@@ -42,6 +42,11 @@
     </nav>
 
     <div class="container question-list-container bg-light my-3 text-center">
+
+        {%if quiz.get_status == "running" and quiz.creator != user %} 
+        <h1><strong>Leaderboard</strong> will be visible after quiz ends.</h1>
+        {%else%} 
+    
         <table class="table">
             <thead>
                 <tr>
@@ -64,8 +69,10 @@
             </tbody>
 
         </table>
-        
+        {%endif%}
     </div>
+
+    
 
 </body>
 

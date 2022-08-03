@@ -4,11 +4,12 @@
     <div class="card-header h5">
         {{quiz.name}} ({{quiz.id}})
     </div>
-    <p>Start time: {{quiz.start_time}}</p>
-    <p>Duration: {{quiz.end_time}}</p>
-    <p>Visibility: {{quiz.visibility}}</p>
-    <p>Category: {{quiz.category}}</p>
+    
     <div class="card-body">
+        <p>Start time: {{quiz.start_time}}</p>
+        <p>Duration: {{quiz.end_time}}</p>
+        <p>Visibility: {{quiz.visibility}}</p>
+        <p>Category: {{quiz.category}}</p>
 
         <div class="d-flex justify-content-end">
             <a href="{%url 'Participate:view-questions' quiz_id=quiz.id%}" class="btn btn-primary mx-3">Participate</a>

@@ -4,6 +4,8 @@ from django.http import HttpResponse
 from django.contrib.auth import login, logout
 from User.models import MusallaUser
 from Quiz.models import *
+from Participate.models import *
+from Create.models import *
 from .forms import *
 import json
 from django.utils.dateparse import parse_datetime
@@ -85,6 +87,7 @@ def edit_questions_view(request, quiz_id):
             if Question.objects.get(id=question["id"]).quiz != quiz_obj:
                 break
             Question.objects.filter(id=question["id"]).update(**question)
+            Submission.objects.filter(question=question["id"]).delete() # remove previous submission because the question was updated
             
         return HttpResponse(
             json.dumps({"msg": "ok"}),
@@ -107,7 +110,7 @@ def edit_questions_view(request, quiz_id):
 def add_question_view(request, quiz_id):
     if request.user.is_authenticated == False:
         return HttpResponse(
-            "Not authenticated",
+            {"msg":"Not authenticated"},
             status=401
         )
 
@@ -174,3 +177,30 @@ def delete_question_view(request, quiz_id):
             content_type="application/json",
             status=204
         )
+
+def upload_view(request, quiz_id):
+    if request.user.is_authenticated == False:
+        return HttpResponse(
+            json.dumps({"msg": "Not authorized"}),
+            content_type="application/json",
+            status=401
+        )
+
+    
+    if request.method == 'POST':
+        quiz_obj = Quiz.objects.get(id=quiz_id)
+
+        if quiz_obj.creator != request.user:
+            return HttpResponse(
+                json.dumps({"msg": "Not authorized to edit this quiz"}),
+                content_type="application/json",
+                status=401
+            )
+
+        image_obj = Image.objects.create(quiz=quiz_obj, image = request.FILES['file'])
+        return HttpResponse(
+            json.dumps({"location" :image_obj.image.url ,}),
+                content_type="application/json",
+                status=200
+        )
+    

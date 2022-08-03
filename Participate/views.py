@@ -126,10 +126,20 @@ class ValidateAnswer():
         if question_obj.question_type == "single_choice":
             if self.validate_single_choice():
                 self.isValid = True
+        elif question_obj.question_type == "multiple_choice":
+            if self.validate_multiple_choice():
+                self.isValid = True
 
     def validate_single_choice(self):
         if len(self.answer) == 1 and self.answer[0] < len(self.question_obj.options):
             if self.answer[0] == self.question_obj.answer[0]:
+                self.points = self.question_obj.points
+            return True
+        return False
+
+    def validate_multiple_choice(self):
+        if len(self.answer) > 0 and max(self.answer) < len(self.question_obj.options):
+            if len(self.answer) == len(self.question_obj.answer) and all(i in self.question_obj.answer for i in self.answer): # evaluation
                 self.points = self.question_obj.points
             return True
         return False

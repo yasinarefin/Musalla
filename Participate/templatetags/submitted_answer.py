@@ -10,7 +10,7 @@ def get_submitted_answer(user, question_id):
     if question_obj.question_type == "single_choice":
         return Submission.objects.get(user=user, question=question_obj).answer
     elif question_obj.question_type == "multiple_choice":
-        pass
+        return Submission.objects.get(user=user, question=question_obj).answer
     elif question_obj.question_type == "value_input":
         pass
 

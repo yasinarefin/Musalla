@@ -1,0 +1,74 @@
+    <!-- Single choice question -->
+            
+    <div class="d-none container border-dark bg-light text-dark p-3 mb-3" data-question-id="0" data-question-type="single_choice">
+                    
+        <div class="form-group mb-2 text-center">
+            <div class="d-flex justify-content-between mb-2 align-items-center">
+                <label class="h5 text-primary" for="exampleFormControlTextarea1">Single choice</label>
+                <div class="d-flex align-items-center justify-content-end">
+                    <label class="text-secondary">Points: </label>
+                    <input class="form-control w-50" data-input-name="points" placeholder="enter points" type="number">
+                </div>
+                
+            </div>
+            <div data-type="editor">
+                <textarea class="form-control" rows="3"></textarea>
+            </div>
+            
+        </div>
+        <div>
+        </div>
+
+        <div id="btn-add" class="d-flex justify-content-between">
+            <button type="button" data-btype="delete-question" class="btn btn-danger">Delete</button>
+            <button type="button" data-btype="add-option" class="btn btn-secondary">Add option</button>
+            <button type="button" data-btype="update-question" class="btn btn-secondary">Update</button>
+        </div>
+    </div>
+
+    <!-- Single choice option -->
+    <div class="d-none form-check" data-option-type="single-choice-option">
+        <input class="form-check-input" name="question-count-radio" type="radio">
+        <div class="input-group mb-3 input-group-sm">
+            <span class="input-group-text">Option</span>
+            <input type="text" class="form-control">
+            <button class="btn btn-outline-danger" data-btype="delete-option"><i class="bi bi-trash"></i></button>
+        </div>
+    </div>
+
+    <!--Multiple choice question-->
+    <div class="d-none container border-dark bg-light text-dark p-3 mb-3" data-question-id="0" data-question-type="multiple_choice">
+            
+        <div class="form-group mb-2 text-center">
+            <div class="d-flex justify-content-between mb-2 align-items-center">
+                <label class="h5 text-primary" for="exampleFormControlTextarea1">Multiple choice</label>
+                <div class="d-flex align-items-center justify-content-end">
+                    <label class="text-secondary">Points: </label>
+                    <input class="form-control w-50" data-input-name="points" placeholder="enter points" type="number">
+                </div>
+                
+            </div>
+            
+            <div data-type="editor">
+                <textarea class="form-control" rows="3"></textarea>
+            </div>
+        </div>
+        <div>
+        </div>
+
+        <div id="btn-add" class="d-flex justify-content-between">
+            <button type="button" data-btype="delete-question" class="btn btn-danger">Delete</button>
+            <button type="button" data-btype="add-option" class="btn btn-secondary">Add option</button>
+            <button type="button" data-btype="update-question" class="btn btn-secondary">Update</button>
+        </div>
+    </div>
+
+    <!-- multiple choice option -->
+    <div class="d-none form-check" data-option-type="multiple-choice-option">
+        <input class="form-check-input" name="question-count-checkbox" type="checkbox">
+        <div class="input-group mb-3 input-group-sm">
+            <span class="input-group-text">Option</span>
+            <input type="text" class="form-control">
+            <button class="btn btn-outline-danger" data-btype="delete-option"><i class="bi bi-trash"></i></button>
+        </div>
+    </div>

@@ -1,6 +1,7 @@
 from django.db import models
 from User.models import MusallaUser
 from django.utils import timezone
+from tinymce import models as tinymce_models
 # Create your models here.
 
 class Category(models.Model):
@@ -37,16 +38,22 @@ class Quiz(models.Model):
         else:
             return 'running'
 
+    def __str__(self):
+        return self.name
+
 
 
 class Question(models.Model):
     quiz = models.ForeignKey(Quiz, models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     question_type = models.CharField(max_length=20) # single choice, multiple choice or value
-    question_text = models.TextField()
+    question_text = tinymce_models.HTMLField()
     points = models.PositiveIntegerField()
     options = models.JSONField()
     answer = models.JSONField()
+
+    def __str__(self):
+        return str(self.id)
 
 
 class AllowedUser(models.Model):

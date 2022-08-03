@@ -10,8 +10,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="{% static 'styles.css'%}">
         
+        <script src="https://cdn.tiny.cloud/1/k1243nhqi871wsgon6erqu4nh1armb3pi5u9m4lm1ojjdfyr/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+        <!-- <script src="{%static 'js/tinymce/tinymce.min.js' %}"></script> -->
 
-        <!-- <script src="https://cdn.tiny.cloud/1/k1243nhqi871wsgon6erqu4nh1armb3pi5u9m4lm1ojjdfyr/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script> -->
     </head>
 
     <body>
@@ -36,16 +37,6 @@
             
         </nav>
         
-         <!-- <script>
-           tinymce.init({
-             selector: 'textarea',
-             plugins: 'a11ychecker linkchecker autolink lists checklist pageembed permanentpen powerpaste table advtable tableofcontents tinycomments tinymcespellchecker',
-             toolbar: 'a11ycheck code export formatpainter  pageembed permanentpen table tableofcontents',
-             toolbar_mode: 'floating',
-             tinycomments_mode: 'embedded',
-             tinycomments_author: 'Author name',
-           });
-         </script> -->
         <div class="container question-list-container mt-3" id="questions">
             {%for question in questions%} 
             
@@ -64,25 +55,13 @@
                         </div>
                         
                     </div>
-                    
-                    <textarea class="form-control" rows="3">{{question.question_text}}</textarea>
+                    <div data-type="editor">
+                        <textarea class="form-control" rows="3">{{question.question_text}}</textarea>
+                    </div>
                 </div>
                 <div>
                     {%for option in  question.options %} 
                     <div class="form-check" data-option-type="single-choice-option">
-
-                        {%comment%}
-                        
-                        <!-- {%if forloop.counter0|in_json:question.answer %}
-                        <input class="form-check-input" checked name="question-{{question_counter}}-radio" type="radio">
-                        {%else%} 
-                        
-                        <input class="form-check-input" name="question-{{question_counter}}-radio" type="radio">
-                        {%endif%} -->
-
-                        <!-- <input class="form-check-input" {%if forloop.counter0|in_json:question.answer %} checked {%endif%} name="question-{{question_counter}}-radio" type="radio"> -->
-                        <!-- <input class="form-check-input" {%if forloop.counter0 in question.answer %} checked {%endif%} name="question-{{question_counter}}-radio" type="radio">  -->
-                        {%endcomment%}
 
                         <input class="form-check-input" {%if forloop.counter0 in question.answer %} checked {%endif%} name="question-{{question_counter}}-radio" type="radio">
                         <div class="input-group mb-3 input-group-sm">
@@ -98,59 +77,68 @@
                 <div id="btn-add" class="d-flex justify-content-between">
                     <button type="button" data-btype="delete-question" class="btn btn-danger">Delete</button>
                     <button type="button" data-btype="add-option" class="btn btn-secondary">Add option</button>
+                    <button type="button" data-btype="update-question" class="btn btn-secondary">Update</button>
                 </div>
             </div>
 
+            {%endwith%}
+
+            {%elif question.question_type == "multiple_choice" %}
+            {%with question_counter=forloop.counter0%}
+            <div class="container border-dark bg-light text-dark p-3 mb-3" data-question-id="{{question.id}}" data-question-type="multiple_choice">
+                
+                <div class="form-group mb-2 text-center">
+                    <div class="d-flex justify-content-between mb-2 align-items-center">
+                        <label class="h5 text-primary" for="exampleFormControlTextarea1">Multiple choice</label>
+                        <div class="d-flex align-items-center justify-content-end">
+                            <label class="text-secondary">Points: </label>
+                            <input class="form-control w-50" data-input-name="points" placeholder="enter points" type="number" value="{{question.points}}">
+                        </div>
+                        
+                    </div>
+                    <div data-type="editor">
+                        <textarea class="form-control" rows="3">{{question.question_text}}</textarea>
+                    </div>
+                    
+                </div>
+                <div>
+                    {%for option in  question.options %} 
+                    <div class="form-check" data-option-type="multiple-choice-option">
+                        <input class="form-check-input" {%if forloop.counter0 in question.answer %} checked {%endif%} name="question-{{question_counter}}-checkbox" type="checkbox">
+                        <div class="input-group mb-3 input-group-sm">
+                            <span class="input-group-text">Option</span>
+                            <input type="text" class="form-control" value="{{option}}">
+                            <button class="btn btn-outline-danger" data-btype="delete-option"><i class="bi bi-trash"></i></button>
+                         </div>
+                    </div>
+                    {%endfor%}
+                </div>
+    
+                <div id="btn-add" class="d-flex justify-content-between">
+                    <button type="button" data-btype="delete-question" class="btn btn-danger">Delete</button>
+                    <button type="button" data-btype="add-option" class="btn btn-secondary">Add option</button>
+                    <button type="button" data-btype="update-question" class="btn btn-secondary">Update</button>
+                </div>
+            </div>
             {%endwith%}
             {%endif%}
             {%endfor%}
             
         </div>
-        <div id="q-add" class="d-flex justify-content-center my-3">
-            <button class="btn btn-primary" id="add-question-btn">Add question</button>
+        <div id="q-add" class="container d-flex question-list-container justify-content-around my-3">
+            <button class="btn btn-primary" id="btn-add-single-choice">Add single choice</button>
+            <button class="btn btn-success" id="btn-add-multiple-choice">Add multiple choice</button>
         </div>
         
-
-        <!-- Single choice question -->
+        {%include "dummy_elements.html" %}
         
-        <div class="d-none container border-dark bg-light text-dark p-3 mb-3" data-question-id="0" data-question-type="single_choice">
-                
-            <div class="form-group mb-2 text-center">
-                <div class="d-flex justify-content-between mb-2 align-items-center">
-                    <label class="h5 text-primary" for="exampleFormControlTextarea1">Single choice</label>
-                    <div class="d-flex align-items-center justify-content-end">
-                        <label class="text-secondary">Points: </label>
-                        <input class="form-control w-50" data-input-name="points" placeholder="enter points" type="number">
-                    </div>
-                    
-                </div>
-                
-                <textarea class="form-control" rows="3"></textarea>
-            </div>
-            <div>
-            </div>
-
-            <div id="btn-add" class="d-flex justify-content-between">
-                <button type="button" data-btype="delete-question" class="btn btn-danger">Delete</button>
-                <button type="button" data-btype="add-option" class="btn btn-secondary">Add option</button>
-            </div>
-        </div>
-        
-        <!-- Single choice option -->
-        <div class="d-none form-check" data-option-type="single-choice-option">
-            <input class="form-check-input" name="question-count-radio" type="radio">
-            <div class="input-group mb-3 input-group-sm">
-                <span class="input-group-text">Option</span>
-                <input type="text" class="form-control">
-                <button class="btn btn-outline-danger" data-btype="delete-option"><i class="bi bi-trash"></i></button>
-             </div>
-        </div>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
         <script>
-            var quiz_id = "{{quiz_id}}";
+            var quiz_id = parseInt("{{quiz_id}}");
             var csrf_token = "{{csrf_token}}";
         </script>
+        <script src="{%static 'js/tinymce.js' %}"></script>
         <script src="{%static 'js/create_questions.js'%}"></script>
     </body>
 </html>

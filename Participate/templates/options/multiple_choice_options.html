@@ -1,0 +1,56 @@
+{% load static %}
+{% load if_submitted %}
+{% load submitted_answer %}
+{% load correct_answer %}
+
+<ul class="list-group list-group-flush" data-list-name="option-list">
+    {%for option in question.options%}
+
+    {%if quiz.get_status == "ended"%}
+    {%with correct_answer=question.id|correct_answer%} 
+
+    {%if user|if_submitted:question.id %}
+
+    {%with submitted_answer=user|submitted_answer:question.id %}
+    
+    <li class="list-group-item {%if forloop.counter0 in correct_answer %} border border-success {%endif%}">
+        <input type="checkbox" {%if forloop.counter0 in submitted_answer%}checked{%endif%}
+            name="question-{{question_counter}}-option">
+        {{option}}
+    </li>
+    {%endwith%}
+
+    {%else%}
+    <li class="list-group-item {%if forloop.counter0 in correct_answer %} border border-success {%endif%}">
+        <input type="checkbox" name="question-{{question_counter}}-option">
+        {{option}}
+    </li>
+    {%endif%}
+
+    {%endwith%}
+    {%else%}
+
+    {%if user|if_submitted:question.id %}
+
+    {%with submitted_answer=user|submitted_answer:question.id %}
+    
+
+    <li class="list-group-item {%if forloop.counter0 in correct_answer %} border border-success {%endif%}">
+        <input type="checkbox" {%if forloop.counter0 in submitted_answer%}checked{%endif%}
+            name="question-{{question_counter}}-option">
+        {{option}}
+    </li>
+    {%endwith%}
+
+    {%else%}
+    <li class="list-group-item {%if forloop.counter0 in correct_answer %} border border-success {%endif%}">
+        <input type="checkbox" name="question-{{question_counter}}-option">
+        {{option}}
+    </li>
+    {%endif%}
+
+
+    {%endif%}
+
+    {%endfor%}
+</ul>

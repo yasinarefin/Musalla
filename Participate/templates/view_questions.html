@@ -10,6 +10,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
     <link rel="stylesheet" href="{%static 'styles.css'%}">
     <link rel="stylesheet" href="{%static 'timeTo.css'%}">
 </head>
@@ -59,14 +60,14 @@
         {%with question_counter=forloop.counter %}
 
         <div class="card mb-3" data-question-type="{{question.question_type}}" data-question-id="{{question.id}}">
-            <div class="card-header">
-                {{question.question_text}}
+            <div class="card-header" data-type="question-container">
+                {{question.question_text|safe}}
             </div>
 
             {%if question.question_type == "single_choice"%}
                 {%include "options/single_choice_options.html"%}
             {%elif question.question_type == "multiple_choice"%}
-
+                {%include "options/multiple_choice_options.html"%}
             {%else%}
 
             {%endif%}
@@ -95,6 +96,15 @@
     <script>
         $(document).ready(function () {
 
+            // add custom styles to raw html from db
+
+            $("[data-type='question-container']").each(
+                function(idx, element){
+                    $(element).find("img").addClass("img-fluid");
+                    $(element).find("table").addClass("table table-bordered");
+                }
+            );
+
             if(time_remaining != 0){
                 $('#countdown-timer').timeTo(
                     time_remaining,
@@ -112,9 +122,9 @@
                 var questionCont = clickedBtn.closest("[data-question-id]");
                 var questionId = questionCont.attr("data-question-id");
                 var answer = []
-
+                var options = clickedBtn.parent().parent().parent().children().eq(1);
                 if (questionCont.attr("data-question-type") === "single_choice") {
-                    var options = clickedBtn.parent().parent().parent().children().eq(1);
+                    
                     var checkedIdx = -1;
 
                     options.children().each(function (idx, element) {
@@ -125,6 +135,13 @@
 
                     answer.push(checkedIdx);
 
+                }else if(questionCont.attr("data-question-type") === "multiple_choice"){
+
+                    options.children().each(function (idx, element) {
+                        if ($(element).children().eq(0).is(":checked")) {
+                            answer.push(idx);
+                        }
+                    });
                 }
 
                 $.ajax({

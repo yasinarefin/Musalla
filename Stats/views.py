@@ -20,11 +20,6 @@ def leaderboard_view(request, quiz_id):
         quiz= quiz_obj
     ).values("user__username").annotate(score=Sum('points')).order_by("-score")
 
-    opp = Question.objects.filter(quiz__id=1).values(
-        "question_text").annotate(submitted=Count("submission__user"))
-
-    for i in opp:
-        print(i)
     return render(request, "leaderboard.html", {
         "quiz" : quiz_obj,
         "leaderboard" : leaderboard,
