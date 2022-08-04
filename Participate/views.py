@@ -116,6 +116,87 @@ def submit_view(request, question_id):
         )
 
 
+def clarification_view(request, quiz_id):
+    quiz_obj = Quiz.objects.get(id=quiz_id)
+
+    if quiz_obj.visibility == "private":
+        if AllowedUser.objects.filter(user=request.user).exists() == False:
+            return HttpResponse(
+                json.dumps({"msg": "Not authenticated for this quiz"}),
+                content_type="application/json",
+                status=403
+            )
+
+    
+
+    if request.method == "POST":
+
+        if quiz_obj.get_status != "running":
+            return HttpResponse(
+                json.dumps({"msg": "Quiz is not running"}),
+                content_type="application/json",
+                status=403
+            )
+        
+        question_no = int(request.POST.get("question_no")) \
+            if request.POST.get("question_no").isdigit() else 0
+
+        
+        message = request.POST.get("message")
+        if 1 <= question_no <= Question.objects.filter(quiz=quiz_obj).count():
+            question_obj = Question.objects.filter(quiz=quiz_obj)[question_no-1:question_no].get()
+            print(question_obj)
+            Clarification.objects.create(quiz=quiz_obj, question=question_obj, asked_by=request.user, text=message )
+            return redirect(request.path+f"?question_no={question_no}")
+        else:
+            return HttpResponse(
+                json.dumps({"msg": "Question no out of range"}),
+                content_type = "application/json",
+                status = 401
+            )
+
+
+    question_no = int(request.GET.get('question_no',"0")) \
+         if request.GET.get('question_no',"0").isdigit() else 0 
+
+    
+    clarification_objs = Clarification.objects.filter(quiz=quiz_obj).order_by("is_answered") \
+         if question_no== 0 \
+            else Clarification.objects.filter(
+                question=Question.objects.filter(quiz=quiz_obj)[question_no-1:question_no]
+            ).order_by("is_answered")
+
+    
+    question_objs = Question.objects.filter(quiz=quiz_obj)
+
+    
+    return render(request, "clarification.html", 
+        {
+            "quiz" : quiz_obj,
+            "clarifications": clarification_objs,
+            "questions" : question_objs,
+            "selected" : int(question_no)
+        }
+    )
+
+def answer_clarification_view(request, clarification_id):
+    clarification_obj = Clarification.objects.get(id = clarification_id)
+    if clarification_obj.quiz.creator != request.user:
+        return HttpResponse(
+            json.dumps({"msg": "Not authenticated to answer clarification"}),
+            content_type="application/json",
+            status=403
+        )
+    if request.method == "POST":
+        
+        clarification_obj.answer = request.POST.get("answer")
+        clarification_obj.is_answered = True
+        clarification_obj.save()
+
+
+        return redirect(request.META.get('HTTP_REFERER'))
+
+
 class ValidateAnswer():
     def __init__(self, answer, question_obj):
         self.answer = answer
@@ -143,3 +224,4 @@ class ValidateAnswer():
                 self.points = self.question_obj.points
             return True
         return False
+

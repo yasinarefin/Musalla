@@ -41,7 +41,7 @@
                         <a href="/" class="nav-link"><strong>Home</strong> </a>
                     </li>
                     <li class="nav-item">
-                        <a href="/" class="nav-link"><strong>Clarifications</strong> </a>
+                        <a href="{%url 'Participate:clarification' quiz_id=quiz.id%}" class="nav-link"><strong>Clarifications</strong> </a>
                     </li>
                     <li class="nav-item">
                         <a href="{%url 'Stats:leaderboard' quiz_id=quiz.id%}" class="nav-link"><strong>Leaderboard</strong> </a>
@@ -54,13 +54,16 @@
     </nav>
 
 
-    <div class="container question-list-container" id="question-list-container">
+    <div class="container question-list-container my-3" id="question-list-container">
         {%for question in questions%}
 
         {%with question_counter=forloop.counter %}
 
         <div class="card mb-3" data-question-type="{{question.question_type}}" data-question-id="{{question.id}}">
-            <div class="card-header" data-type="question-container">
+            <div class="card-header">
+                Question no: {{forloop.counter}}
+            </div>
+            <div class="card-header bg-light" data-type="question-container">
                 {{question.question_text|safe}}
             </div>
 
@@ -73,7 +76,7 @@
             {%endif%}
             <div class="card-body">
                 <div class="d-flex justify-content-between">
-                    <i class="bi bi-question-circle"></i>
+                    <a href="{% url 'Participate:clarification' quiz.id %}?question_no={{forloop.counter}}" title="ask clarification"><i class="bi bi-question-circle"></i></a>
                     {{question.points}} Points
                     <button class="btn btn-primary" data-btn-type="submit" {%if user|if_submitted:question.id %} disabled {%endif%}> Submit </button>
                 </div>
@@ -93,83 +96,7 @@
         var csrf_token = "{{csrf_token}}";
         var time_remaining = parseInt("{{time_remaining}}");
     </script>
-    <script>
-        $(document).ready(function () {
-
-            // add custom styles to raw html from db
-
-            $("[data-type='question-container']").each(
-                function(idx, element){
-                    $(element).find("img").addClass("img-fluid");
-                    $(element).find("table").addClass("table table-bordered");
-                }
-            );
-
-            if(time_remaining != 0){
-                $('#countdown-timer').timeTo(
-                    time_remaining,
-                    function () {
-                        location.reload(true);
-                    }
-                );
-            }
-
-            
-            
-            $("#question-list-container").on("click", "button[data-btn-type='submit']", function () {
-                var clickedBtn = $(this);
-                //var questionCont = clickedBtn.parent().parent().parent();
-                var questionCont = clickedBtn.closest("[data-question-id]");
-                var questionId = questionCont.attr("data-question-id");
-                var answer = []
-                var options = clickedBtn.parent().parent().parent().children().eq(1);
-                if (questionCont.attr("data-question-type") === "single_choice") {
-                    
-                    var checkedIdx = -1;
-
-                    options.children().each(function (idx, element) {
-                        if ($(element).children().eq(0).is(":checked")) {
-                            checkedIdx = idx;
-                        }
-                    });
-
-                    answer.push(checkedIdx);
-
-                }else if(questionCont.attr("data-question-type") === "multiple_choice"){
-
-                    options.children().each(function (idx, element) {
-                        if ($(element).children().eq(0).is(":checked")) {
-                            answer.push(idx);
-                        }
-                    });
-                }
-
-                $.ajax({
-                    url: `/participate/submit/${questionId}/`,
-                    type: 'POST',
-                    dataType: "json",
-                    data: {
-                        answer: JSON.stringify(answer),
-                        csrfmiddlewaretoken: csrf_token
-                    },
-                    success: function (data, textStatus, jQxhr) {
-                        if (jQxhr.status == 200) {
-                            alert("submiited");
-                            clickedBtn.prop("disabled", true);
-                        }
-                    },
-                    error: function (jqXhr, textStatus, errorThrown) {
-                        alert(jqXhr.responseText);
-                    }
-                });
-
-                //var options = clickedBtn.closest("ul[data-list-name='option-list']");
-
-
-
-            });
-        });
-    </script>
+    <script src="{%static 'view_questions.js'%}"></script>
 </body>
 
 </html>

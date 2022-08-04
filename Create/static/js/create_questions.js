@@ -59,6 +59,10 @@ $(document).ready(function(){
         return cur_ques;
     }
     $("#btn-save").click(function(){
+        if(initialzed_editors != $("[data-question-id]").length ){
+            alert("Editors are yet to be initialized");
+            return;
+        }
         question_arr = [];
         //alert($("#questions").children().length);
 
@@ -87,10 +91,13 @@ $(document).ready(function(){
             dataType:"json",
             data: {questions: JSON.stringify(question_arr), csrfmiddlewaretoken: csrf_token},
             success: function( data, textStatus, jQxhr ){
-                alert("ok");
+                if (jQxhr.status == 200){
+                    alert("Questions saved");
+                }
+                
             },
             error: function( jqXhr, textStatus, errorThrown ){
-                alert("error occured");
+                alert(jqXhr.responseText);
             }
         });
     }
@@ -109,6 +116,7 @@ $(document).ready(function(){
                 $("#questions").append(q_el);
                 q_count++;
                 location.reload();
+              //  initWithTarget(q_el.find("[data-type='editor']").get(0));
                 
 
             },
@@ -163,6 +171,7 @@ $(document).ready(function(){
             },
             success: function( data, textStatus, jQxhr ){
                 clickedBtn.parent().parent().remove();
+                number_questions();
             },
             error: function( jqXhr, textStatus, errorThrown ){
                 alert("error occured");
@@ -219,5 +228,13 @@ $(document).ready(function(){
         update_questions(question_arr);
         
     });
+
+    function number_questions(){ // renumber than question after add or delete
+        $("[data-holder='question-no']").each(
+            function(idx, element){
+                $(element).html(`${idx}`);
+            }
+        );
+    }
     
 });

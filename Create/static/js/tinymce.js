@@ -1,4 +1,4 @@
-
+var initialzed_editors = 0; // variable to check if all editors are ready
 const image_upload_handler = (blobInfo, progress) => new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
     xhr.withCredentials = false;
@@ -52,12 +52,42 @@ function initTiny(){
         ],
         relative_urls : false,
         remove_script_host : true,
+        setup: (editor) => {
+            editor.on('init', () => {
+               initialzed_editors++;
+            });
+        },
         
     }
 
     )
 }
 
+
 initTiny();
+
+// under development
+function initWithTarget(element){
+    tinymce.init({
+        target: element,
+        automatic_uploads: true,
+        images_upload_handler: image_upload_handler,
+        plugins: [
+            "insertdatetime",
+            'image',
+            'table',
+        ],
+        relative_urls : false,
+        remove_script_host : true,
+        setup: (editor) => {
+            editor.on('init', () => {
+               initialzed_editors++;
+            });
+        },
+        
+    }
+
+    )
+}
 
 

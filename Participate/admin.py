@@ -5,3 +5,4 @@ from .models import *
 class SubmissionAdmin(admin.ModelAdmin):
     list_display = ('quiz', 'user', 'points')
 admin.site.register(Submission, SubmissionAdmin)
+admin.site.register(Clarification)

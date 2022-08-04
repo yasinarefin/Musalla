@@ -64,6 +64,7 @@ def createnew_view(request):
                 creator=request.user,
                 category=Category.objects.get(name=field_values["category"])
             )
+            return redirect(f"/create/{obj.id}/edit-questions/")
     context = {
         "categories": [category.name for category in Category.objects.all()],
         "quiz_create_form": field_values,
@@ -81,6 +82,7 @@ def edit_questions_view(request, quiz_id):
         return HttpResponse("You are not authorized to edit the quiz")
 
     if request.method == "POST":
+
         questions_arr = json.loads(request.POST.get("questions"))
 
         for question in questions_arr:

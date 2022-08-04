@@ -24,14 +24,21 @@
                    <p class="h6 my-0">Quiz name: {{quiz_name}} (id={{quiz_id}})</p>
     
                </a>
-
                <ul class="navbar-nav ms-auto">
-
+                <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                    <button id="btn-save" class="btn btn-dark mx-3">Save</button>
-                </li>
-
+                        <a href="/" class="nav-link"><strong>Home</strong> </a>
+                    </li>
                 </ul>
+
+            </ul>
+               <button id="btn-save" class="btn btn-dark mx-3">Save</button>
+               <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu">
+                    <span class="navbar-toggler-icon"></span>
+                </button> -->
+                
+
+               
 
             </div>
             
@@ -48,7 +55,8 @@
                 
                 <div class="form-group mb-2 text-center">
                     <div class="d-flex justify-content-between mb-2 align-items-center">
-                        <label class="h5 text-primary" for="exampleFormControlTextarea1">Single choice</label>
+                        <label class="h5 text-primary" data-holder="question-no">{{question_counter|add:1}}</label>
+                        <label class="p text-primary">Single choice</label>
                         <div class="d-flex align-items-center justify-content-end">
                             <label class="text-secondary">Points: </label>
                             <input class="form-control w-50" placeholder="enter points" data-input-name="points" type="number" value="{{question.points}}">
@@ -89,7 +97,8 @@
                 
                 <div class="form-group mb-2 text-center">
                     <div class="d-flex justify-content-between mb-2 align-items-center">
-                        <label class="h5 text-primary" for="exampleFormControlTextarea1">Multiple choice</label>
+                        <label class="h5 text-primary" data-holder="question-no">{{question_counter|add:1}}</label>
+                        <label class="p text-primary">Multiple choice</label>
                         <div class="d-flex align-items-center justify-content-end">
                             <label class="text-secondary">Points: </label>
                             <input class="form-control w-50" data-input-name="points" placeholder="enter points" type="number" value="{{question.points}}">
