@@ -9,13 +9,14 @@
         
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="{% static 'styles.css'%}">
+        <title>Dashboard-creation</title>
         
 
         <!-- <script src="https://cdn.tiny.cloud/1/k1243nhqi871wsgon6erqu4nh1armb3pi5u9m4lm1ojjdfyr/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script> -->
     </head>
 
     <body>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-light py-3 sticky-top">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-light sticky-top">
             <div class="container">
 
                <a href="/" class="navbar-brand text-dark">
@@ -35,14 +36,18 @@
 
         </nav>
 
-        <div class="container p-4">
+        <div class="container question-list-container">
             <h4 class="text-center">You have created a total of {{created_quizzes|length}} quizzes</h4>
-            <form>
-                <div class="input-group">
-                        <input type="search" name="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
-                        <button type="submit" class="btn btn-outline-primary">search</button>
-                </div>
-            </form>
+            <div class="d-sm-flex justify-content-around">
+                <form>
+                    <div class="input-group">
+                            <input type="search" name="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+                            <button type="submit" class="btn btn-outline-primary">search</button>
+                    </div>
+                </form>
+                <a href="{%url 'Create:create-new'%}" class="btn btn-info" role="button">Create new quiz</a>
+            </div>
+            
             <div>
                 {%for quiz in created_quizzes%}
                     {%include "quiz_card.html" %}

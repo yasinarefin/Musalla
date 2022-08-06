@@ -57,6 +57,7 @@ function initTiny(){
                initialzed_editors++;
             });
         },
+       // extended_valid_elements : "table[class=table table-bordered]",
         
     }
 
@@ -85,9 +86,8 @@ function initWithTarget(element){
             });
         },
         
-    }
-
-    )
+        
+    })
 }
 
 

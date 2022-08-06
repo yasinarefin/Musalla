@@ -12,45 +12,15 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="{%static 'styles.css'%}">
     <link rel="stylesheet" href="{%static 'timeTo.css'%}">
+    <title>{{quiz.name}}-clarification</title>
 </head>
 
 
 <body>
 
-    <!-- navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light py-3 sticky-top">
-        <div class="container">
-            <a href="#" class="navbar-brand">{{quiz.name}}</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <p class="px-3" id="countdown-timer">
-                {%if quiz.get_status == "ended"%}
-                    Quiz has ended
-                {%endif%}
-            </p>
-
-            {%if quiz.get_status == "ended"%}
-                <p>Points earned {{points}}</p>
-            {%endif%}
-
-            <div id="navmenu" class="collapse navbar-collapse">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a href="/" class="nav-link"><strong>Home</strong> </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{%url 'Participate:clarification' quiz_id=quiz.id%}" class="nav-link"><strong>Clarifications</strong> </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{%url 'Stats:leaderboard' quiz_id=quiz.id%}" class="nav-link"><strong>Leaderboard</strong> </a>
-                    </li>
-
-                </ul>
-            </div>
-        </div>
-
-    </nav>
+    <!-- navbar participate -->
+    {%include 'participate_navbar.html' %}
+    
 
     
     <div class="container question-list-container my-3" id="clarification-list-container">

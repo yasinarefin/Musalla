@@ -1,6 +1,6 @@
 $(document).ready(function () {
 
-    // add custom styles to raw html from db
+    //add custom styles to raw html from db
 
     $("[data-type='question-container']").each(
         function(idx, element){

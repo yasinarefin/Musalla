@@ -9,37 +9,15 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{%static 'styles.css'%}">
+    <title>{{quiz.name}}-Leaderboard</title>
 </head>
 
 
 <body>
 
-    <!-- navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light py-3 sticky-top">
-        <div class="container">
-            <a href="#" class="navbar-brand">{{quiz.name}} - Leaderboard</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-
-            <div id="navmenu" class="collapse navbar-collapse">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a href="/" class="nav-link"><strong>Home</strong> </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{%url 'Participate:view-questions' quiz_id=quiz.id%}" class="nav-link"><strong>Questions</strong> </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/" class="nav-link"><strong>Clarifications</strong> </a>
-                    </li>
-
-                </ul>
-            </div>
-        </div>
-
-    </nav>
+    <!-- navbar participate-->
+    {%include 'participate_navbar.html' %}
+    
 
     <div class="container question-list-container bg-light my-3 text-center">
 
@@ -71,7 +49,7 @@
         </table>
         {%endif%}
     </div>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     
 
 </body>

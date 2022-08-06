@@ -1,5 +1,5 @@
 <!-- navbar -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light py-3 sticky-top">
+<nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
     <div class="container">
         <a href="/" class="navbar-brand">Musalla</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu">
@@ -8,7 +8,7 @@
        <div id="navmenu" class="collapse navbar-collapse">
            <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-                <a href="/create/new/" class="nav-link"><strong>Create quiz</strong> </a>
+                <a href="{%url 'User:dashboard-creation'%}" class="nav-link"><strong>Create quiz</strong> </a>
             </li>
 
             <li class="nav-item">
@@ -73,7 +73,7 @@
 
 
             <li class="nav-item">
-                <form action="/quiz/search/" class="form-inline my-2 my-lg-0">
+                <form action="/quiz/search/" class="form-inline">
                     <div class="input-group">
                      <input class="form-control mr-sm-2" name="q" type="search" placeholder="Search quiz by id" aria-label="Search">
                      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>

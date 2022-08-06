@@ -1,0 +1,54 @@
+{%load total_points%}
+<nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+    <div class="container">
+
+
+        <a href="{%url 'Participate:view-questions' quiz_id=quiz.id %}" class="navbar-brand">{{quiz.name}}</a>
+            <a class="px-3 navbar-brand" id="countdown-timer">
+                {%if quiz.get_status == "ended"%}
+                    Quiz has ended
+                {%endif%}
+            </a>
+            {%if quiz.get_status == "ended"%}
+            <a class="navbar-brand">Score: {{points}}/{{quiz|total_points}}</a>
+            {%endif%}
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        
+        
+
+        <div id="navmenu" class="collapse navbar-collapse">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a href="/" class="nav-link">
+                        <i class="bi bi-house-door"></i>
+                        <strong>Home</strong>
+                     </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{%url 'Participate:clarification' quiz_id=quiz.id%}" class="nav-link">
+                        <i class="bi bi-patch-question"></i>
+                        <strong>Clarifications</strong> 
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{%url 'Stats:leaderboard' quiz_id=quiz.id%}" class="nav-link">
+                        <i class="bi bi-trophy"></i>
+                        <strong>Leaderboard</strong> 
+                    </a>
+                </li>
+
+                
+                <li class="nav-item">
+                    <a href="{%url 'Stats:statistics' quiz_id=quiz.id%}" class="nav-link">
+                        <i class="bi bi-bar-chart-line"></i>
+                        <strong>Statistics</strong> 
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+
+</nav>

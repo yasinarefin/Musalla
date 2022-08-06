@@ -17,5 +17,6 @@ def home_view(request):
 def category_view(request, id):
     return render(request, "category.html", {
         "quizzes": Quiz.objects.filter(category=id),
+        "category":Category.objects.get(id=id),
         "categories":Category.objects.all()
     })
