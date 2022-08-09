@@ -1,8 +1,18 @@
 <!-- Take Quiz object as quiz -->
+{%load user_points%}
+{%load total_points%}
 <div class="card my-2 bg-light">
 
-    <div class="card-header h5">
-        {{quiz.name}} ({{quiz.id}})
+    <div class="card-header d-flex justify-content-between">
+        <h5>{{quiz.name}} ({{quiz.id}})</h5>
+        {%if quiz.get_status == "ended" %}
+        <p class="my-0">Score: {{quiz|user_points:request.user}} / {{quiz|total_points}}</p>
+        {%elif quiz.get_status == "running"%}
+        <p class="my-0">Running</p>
+        {%else%}
+        
+        {%endif%}
+        
     </div>
     
     <div class="card-body">
@@ -12,7 +22,13 @@
         <p>Category: {{quiz.category}}</p>
 
         <div class="d-flex justify-content-end">
-            <a href="{%url 'Participate:view-questions' quiz_id=quiz.id%}" class="btn btn-primary mx-3">Participate</a>
+            <a href="{%url 'Participate:view-questions' quiz_id=quiz.id%}" class="btn btn-primary mx-3">
+                {%if quiz.get_status == "ended"%}
+                View
+                {%else%}
+                Participate
+                {%endif%}
+            </a>
             {%if quiz.creator == user%}
             <a href="{% url 'Create:edit-questions' quiz_id=quiz.id %}" class="btn btn-primary">Change</a>
             {%endif%}

@@ -36,8 +36,10 @@
 
         </nav>
 
+        
+
         <div class="container question-list-container">
-            <h4 class="text-center">You have created a total of {{created_quizzes|length}} quizzes</h4>
+            <h4 class="text-center">You have created a total of {{quiz_page.paginator.count}} quizzes</h4>
             <div class="d-sm-flex justify-content-around">
                 <form>
                     <div class="input-group">
@@ -48,12 +50,7 @@
                 <a href="{%url 'Create:create-new'%}" class="btn btn-info" role="button">Create new quiz</a>
             </div>
             
-            <div>
-                {%for quiz in created_quizzes%}
-                    {%include "quiz_card.html" %}
-                {%endfor%}
-
-            </div>
+            {%include "quiz_list_widget.html"%}
 
             
         </div>

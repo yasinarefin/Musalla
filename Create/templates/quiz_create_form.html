@@ -1,0 +1,40 @@
+{% for error in errors%}
+    <div class="alert alert-danger">
+        <strong>{{error}}</strong>
+    </div>
+{%endfor%}
+<form method="POST">
+    {% csrf_token %}
+
+    <div class="form-group">
+        <label for="quiz-name">Quiz Name</label>
+        <input type="text" value="{{quiz.name}}" class="form-control" name="name" id="quiz-name" placeholder="Enter quiz name">
+    </div>
+    
+    <div class="form-group">
+        <label for="start-time">Quiz Start Time</label>
+        <input type="datetime-local" value="{{quiz.start_time|date:'Y-m-d'}}T{{quiz.start_time|time:'H:i:s'}}" class="form-control" name="start_time" id="start-time" placeholder="Enter email">
+    </div>
+
+    <div class="form-group mb-3">
+        <label for="end-time">Quiz End Time</label>
+        <input type="datetime-local" value="{{quiz.end_time|date:'Y-m-d'}}T{{quiz.end_time|time:'H:i:s'}}" class="form-control" name="end_time" id="end-time" placeholder="Enter email">
+    </div>
+   
+    <select class="form-select mb-3" name="category"  aria-label="Default select example">
+        {% for category in categories %}
+        <option {%if quiz.category == category%} selected {%endif%} value="{{category}}">{{category}}</option>
+        {% endfor%}
+    </select>
+
+    <select class="form-select mb-4" name="visibility"  aria-label="Default select example">
+        <option {%if quiz.visibility == "public"%}selected {%endif%} value="public">Public</option>
+        <option {%if quiz.visibility == "private"%}selected {%endif%} value="private">Private</option>
+    </select>
+    
+    
+    <div class="d-flex justify-content-center">
+        <button type="submit" class="btn btn-primary">Update</button>
+    </div>
+    
+</form>

@@ -205,4 +205,38 @@ def upload_view(request, quiz_id):
                 content_type="application/json",
                 status=200
         )
+
+def update_view(request, quiz_id):
+    if request.user.is_authenticated == False:
+        return redirect(f"{reverse('User:login')}?next={request.path}")
+
+    
+    quiz_obj = Quiz.objects.get(id=quiz_id)
+    field_values = {}
+    fields = ["name", "start_time", "end_time", "category", "visibility"]
+    errors = []
+
+    if request.method == "POST":
+        for i in fields:
+            field_values[i] = request.POST.get(i)
+        errors = quiz_form_validator(field_values)
+
+        if len(errors) == 0:
+            obj = Quiz.objects.filter(id=quiz_id).update(
+                name=field_values["name"],
+                start_time=field_values["start_time"],
+                end_time=field_values["end_time"],
+                visibility=field_values["visibility"],
+                creator=request.user,
+                category=Category.objects.get(name=field_values["category"])
+            )
+        return redirect(request.path)
+
+    
+    
+    return render(request, "update.html", {
+        "quiz" : quiz_obj,
+        "errors": errors,
+        "categories" : Category.objects.all()
+    })
     

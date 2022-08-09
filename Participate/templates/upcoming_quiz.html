@@ -15,9 +15,7 @@
 
 
 <body>
-
-    <!-- navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light py-3 sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
         <div class="container">
             <a href="#" class="navbar-brand">{{quiz.name}}</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu">
@@ -29,12 +27,6 @@
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
                         <a href="/" class="nav-link"><strong>Home</strong> </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{%url 'Participate:clarification' quiz_id=quiz.id%}" class="nav-link"><strong>Clarifications</strong> </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{%url 'Stats:leaderboard' quiz_id=quiz.id%}" class="nav-link"><strong>Leaderboard</strong> </a>
                     </li>
 
                 </ul>

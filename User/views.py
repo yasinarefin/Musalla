@@ -6,7 +6,8 @@ from Quiz.models import *
 from .forms import LoginForm, SignupForm
 from django.contrib.auth.forms import UserChangeForm
 from django.urls import reverse
-
+from django.core.paginator import Paginator
+from django.db.models import Q
 def login_view(request):
     form = LoginForm()
     if request.method == 'POST':
@@ -47,10 +48,16 @@ def dashboard_view(request):
 def dashboard_creation_view(request):
     if request.user.is_authenticated == False:
         return redirect("User:login")
+    page_no = request.GET.get("page", 1) 
+    query = request.GET.get("search", "")
+    quiz_objs = Quiz.objects.filter(creator=request.user).order_by("id")
 
-
+    if query != "":
+        quiz_objs = quiz_objs.filter(name__icontains=query).order_by("id")
+    paginator = Paginator(quiz_objs, 4)
     context ={
-        "created_quizzes" : Quiz.objects.filter(creator=request.user),
+        "quiz_page" : paginator.get_page(page_no),
+        #"created_quizzes" : Quiz.objects.filter(creator=request.user),
         "categories":Category.objects.all()
     }
 

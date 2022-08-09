@@ -13,6 +13,8 @@ from django.utils import timezone
 from dateutil.relativedelta import relativedelta
 from django.db.models import Sum
 
+from Participate.helper import *
+
 # Create your views here.
 
 
@@ -50,7 +52,6 @@ def questions_view(request, quiz_id):
         "questions": Question.objects.filter(quiz=quiz_id),
         "submitted_answers": Submission.objects.filter(quiz=quiz_obj, user=request.user),
         "quiz": quiz_obj,
-        "points": Submission.objects.filter(quiz=quiz_obj, user=request.user).aggregate(Sum("points"))["points__sum"],
         "time_remaining": max((quiz_obj.end_time - timezone.now()).total_seconds(),0)
     })
 

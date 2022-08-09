@@ -6,16 +6,16 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="{% static 'styles.css'%}">
-        <title>Category-{{category_name}}</title>
+        <title>{{title}}</title>
     </head>
     {% load static %}
     <body>
         
         {%include "navbar.html"%}
 
-                
         {%include "quiz_list_widget.html"%}
 
+    
         {%include 'footer.html'%}
         
 
