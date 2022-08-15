@@ -53,7 +53,11 @@ def statistics_view(request, quiz_id):
     max_points = Submission.objects.filter(quiz=quiz_obj).values("user").annotate(Sum("points")).aggregate(Max("points__sum")) 
     sum_points = Submission.objects.filter(quiz=quiz_obj).aggregate(Sum("points"))['points__sum']
     participants_count = Submission.objects.filter(quiz=quiz_obj).aggregate(Count('user',distinct=True), )['user__count']
-    avg_points = sum_points / participants_count
+    avg_points = 0 
+    try:
+        avg_points = sum_points / participants_count
+    except:
+        pass
     
     return render(request, "statistics.html", {
         "quiz" : quiz_obj,

@@ -17,27 +17,33 @@
 
     <body>
         <nav class="navbar navbar-expand-lg navbar-dark bg-secondary py-0 sticky-top">
-            <div class="container">
+            <div class="container d-flex justify-content-between">
 
                <a href="#" class="navbar-brand">
                    <p class="my-0">Create question</p>
                    <p class="h6 my-0">Quiz name: {{quiz_name}} (id={{quiz_id}})</p>
     
                </a>
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a href="/" class="nav-link"><strong>Home</strong> </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{%url "Create:update-quiz" quiz_id=quiz_id%}" class="nav-link"><strong>Update</strong> </a>
-                    </li>
-                </ul>
-
                 <button id="btn-save" class="btn btn-dark mx-3">Save</button>
                 
             </div>
+            <div class="container">
+                <ul class="list-group list-group-horizontal">
+                    <li class="list-group-item bg-secondary">
+                        <a href="{%url "Create:update-quiz" quiz_id=quiz_id%}" class="list-group-item list-group-item-primary"><strong>Update</strong> </a>
+                    </li>
+                    <li class="list-group-item bg-secondary">
+                        <a href="/" class="list-group-item list-group-item-primary"><strong>Home</strong> </a>
+                    </li>
+                    <li class="list-group-item bg-secondary">
+                        <a href="/" class="list-group-item list-group-item-primary"><strong>Home</strong> </a>
+                    </li>
+                    
+                </ul>
+             </div>
             
         </nav>
+
         
         <div class="container question-list-container mt-3" id="questions">
             {%for question in questions%} 

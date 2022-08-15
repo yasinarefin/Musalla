@@ -39,32 +39,42 @@
 
             <h5 class="text-primary" aria-describedby="user-help">Allowed users</h5>
             <small id="user-help" class="form-text text-muted">Only usable when quiz is private.</small>
-            <div class="d-flex my-3">
-                <form method="POST">
-                    <input class="form-control" type="text" name="username" placeholder="Enter username to add">
+            <div class="d-flex-fill my-3">
+                <form action="{%url "Create:allowed-user" quiz_id=quiz.id%}" method="POST">
+                    {%csrf_token%}
+                    <input type="hidden" name="operation" value="add">
+                    <textarea class="form-control"
+                       data-url="{%url "Create:allowed-user" quiz_id=quiz.id%}"
+                       rows="3" name="usernames" placeholder="Enter username's separated by comma"></textarea>
                     <button class="btn-primary" type="submit">Add</button>
                 </form>
                 
             </div>
             
             
-            <ul class="list-group">
+            <ul class="list-group mb-3">
 
+                {%for user in allowed_users%}
                 <li class="list-group-item">
-                    <form method="POST">
+                    <form action="{%url "Create:allowed-user" quiz_id=quiz.id%}" method="POST">
                         <div class="d-flex justify-content-between">
-                            <p class="my-0">Rakib</p>
+                            {%csrf_token%}
+                            <input type="hidden" name="operation" value="delete">
+                            <p class="my-0">{{user.user}}</p>
                             
-                            <input type="hidden" name="username" value="Rakib">
-                            <button title="remove user" type="button" class="btn-close" aria-label="Close"></button>
+                            <input type="hidden" name="username" value="{{user.user.username}}">
+                            <button title="remove user" type="submit" class="btn-close" aria-label="Close"></button>
                         </div>
                     </form>
                     
-                     
                 </li>
+                {%endfor%}
+
+                
             </ul>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
     </body>
 </html>
     

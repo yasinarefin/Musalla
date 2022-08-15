@@ -64,6 +64,7 @@ def createnew_view(request):
                 creator=request.user,
                 category=Category.objects.get(name=field_values["category"])
             )
+            AllowedUser.objects.create(quiz=obj, user=request.user) # allow admin to the quiz
             return redirect(f"/create/{obj.id}/edit-questions/")
     context = {
         "categories": [category.name for category in Category.objects.all()],
@@ -212,6 +213,10 @@ def update_view(request, quiz_id):
 
     
     quiz_obj = Quiz.objects.get(id=quiz_id)
+
+    if quiz_obj.creator != request.user:
+        return HttpResponse("You are not authorized to edit the quiz")
+
     field_values = {}
     fields = ["name", "start_time", "end_time", "category", "visibility"]
     errors = []
@@ -233,10 +238,51 @@ def update_view(request, quiz_id):
         return redirect(request.path)
 
     
-    
     return render(request, "update.html", {
         "quiz" : quiz_obj,
         "errors": errors,
-        "categories" : Category.objects.all()
+        "categories" : Category.objects.all(),
+        "allowed_users" : AllowedUser.objects.filter(quiz=quiz_id)
     })
+
+def change_allowed_user_view(request, quiz_id):
+    if request.user.is_authenticated == False:
+        return redirect(f"{reverse('User:login')}?next={request.path}")
+
     
+    quiz_obj = Quiz.objects.get(id=quiz_id)
+
+    if quiz_obj.creator != request.user:
+        return HttpResponse("You are not authorized to edit the quiz")
+
+    # for autocomplete
+    if request.method == "GET":
+        query = request.GET.get("q")
+
+        users = MusallaUser.objects.filter(username__icontains=query)
+
+
+        return HttpResponse(
+            json.dumps([i.username for i in users]),
+            content_type="application/json",
+            status=200
+        )     
+
+    if request.method == "POST":
+        operation = request.POST.get("operation")
+
+        if operation == "add":
+            users = request.POST.get("usernames").split(",")
+            users = list(map(str.strip, users))
+
+            for username in users:
+                user_obj = MusallaUser.objects.filter(username=username)
+                if user_obj.exists():
+                    AllowedUser.objects.create(quiz=quiz_obj, user=user_obj.first())
+
+            return redirect(request.META.get('HTTP_REFERER', '/'))
+        
+        elif operation == "delete":
+            username = request.POST.get("username").strip()
+            AllowedUser.objects.filter(quiz=quiz_obj, user=MusallaUser.objects.get(username=username)).delete()
+            return redirect(request.META.get('HTTP_REFERER', '/'))
