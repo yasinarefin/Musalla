@@ -20,7 +20,7 @@
 
     <div class="container py-3">
         <div class="row">
-            <div class="col-sm-6 border border-dark">
+            <div class="col-lg-6 border border-dark">
                 <div class="container">
                     <p>Total participants: {{total_participants}}  </p>
                     <p>Highest score: {{max_points}}</p>
@@ -28,14 +28,51 @@
                 </div>
                 
             </div>
-            <div class="col-sm-6 border border-dark">
-                
+            <div class="col-lg-6 border border-dark">
+                <canvas id="bar-chart" width="800" height="450"></canvas>
             </div>
         </div>
         
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+    <script>
+        var chart_data = JSON.parse('{{chart_data|safe}}');
+        var colors = [];
+        for(var i =0; i < chart_data['data'].length; i++){
+            var randomColor = "#"+ Math.floor(Math.random()*16777215).toString(16);
+            colors.push(randomColor);
+        }
+        new Chart(document.getElementById("bar-chart"), {
+        type: 'bar',
+        data: {
+        labels: chart_data['labels'],
+        datasets: [
+            {
+                label: "Participants who got at least this number",
+                backgroundColor: colors,
+                data: chart_data['data']
+            }
+        ]
+        },
+        options: {
+            legend: { display: false },
+            title: {
+                display: true,
+                text: 'Number chart'
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        stepSize: 1
+                    }
+                }]
+            }
+        }
+    });
+    </script>
 
 </body>
 

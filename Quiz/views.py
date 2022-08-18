@@ -16,6 +16,8 @@ def home_view(request):
     })
 
 def category_view(request, id):
+    if request.user.is_authenticated == False:
+        return redirect(f"{reverse('User:login')}?next={request.path}")
     page_no = request.GET.get("page", 1)
     paginator = None
     if id > 0: # specific category
@@ -30,6 +32,8 @@ def category_view(request, id):
     })
 
 def search_view(request):
+    if request.user.is_authenticated == False:
+        return redirect(f"{reverse('User:login')}?next={request.path}")
     query = request.GET.get("search", "")
 
     page_no = request.GET.get("page", 1)

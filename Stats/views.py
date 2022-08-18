@@ -7,6 +7,7 @@ from Quiz.models import *
 from User.models import *
 from Participate.models import *
 from django.db.models import Count, Sum, Q, Max, Avg
+import json
 # Create your views here.
 
 
@@ -48,7 +49,15 @@ def statistics_view(request, quiz_id):
             )
 
     
+    total_points = Question.objects.filter(quiz=quiz_obj).aggregate(Sum('points'))['points__sum']
+    labels = []
+    data = []
 
+    for i in range(20):
+        lab = total_points/ 25 * (i+1)
+        labels.append(str(int(lab)))
+        c = Submission.objects.filter(quiz=quiz_obj).values("user").annotate(Sum("points")).filter(points__sum__gte = lab).count()
+        data.append(c)
     
     max_points = Submission.objects.filter(quiz=quiz_obj).values("user").annotate(Sum("points")).aggregate(Max("points__sum")) 
     sum_points = Submission.objects.filter(quiz=quiz_obj).aggregate(Sum("points"))['points__sum']
@@ -64,6 +73,11 @@ def statistics_view(request, quiz_id):
         "points": Submission.objects.filter(quiz=quiz_id, user=request.user).aggregate(Sum("points"))["points__sum"],
         "total_participants": Submission.objects.filter(quiz=quiz_id).values("user__username").distinct().count(),
         "max_points":max_points["points__sum__max"]    ,
-        "avg_points" : avg_points
+        "avg_points" : avg_points,
+        "chart_data": json.dumps({
+            "labels": labels,
+            "data" : data,
+        }),
+        
         }
     )
