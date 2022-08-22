@@ -8,6 +8,7 @@ from User.models import *
 from Participate.models import *
 from django.db.models import Count, Sum, Q, Max, Avg
 import json
+import math
 # Create your views here.
 
 
@@ -67,17 +68,18 @@ def statistics_view(request, quiz_id):
         avg_points = sum_points / participants_count
     except:
         pass
-    
+
     return render(request, "statistics.html", {
-        "quiz" : quiz_obj,
-        "points": Submission.objects.filter(quiz=quiz_id, user=request.user).aggregate(Sum("points"))["points__sum"],
-        "total_participants": Submission.objects.filter(quiz=quiz_id).values("user__username").distinct().count(),
-        "max_points":max_points["points__sum__max"]    ,
-        "avg_points" : avg_points,
-        "chart_data": json.dumps({
-            "labels": labels,
-            "data" : data,
-        }),
+            "quiz" : quiz_obj,
+            "points": Submission.objects.filter(quiz=quiz_id, user=request.user).aggregate(Sum("points"))["points__sum"],
+            "total_participants": Submission.objects.filter(quiz=quiz_id).values("user__username").distinct().count(),
+            "max_points":max_points["points__sum__max"]    ,
+            "avg_points" : avg_points,
+            "chart_data": json.dumps({
+                "labels": labels,
+                "data" : data,
+                "step_size" : math.ceil(participants_count / 25) 
+            }),
         
         }
     )
