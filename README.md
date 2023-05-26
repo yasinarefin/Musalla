@@ -14,6 +14,8 @@ Musalla: An free and open-source online quiz platform.
 * Request clarification from the quiz creator while the quiz is running.
 * TinyMCE is also integrated into Django admin.
 
+## Tools and technologies ##
+
 ![Logo](tools.JPG)
 Musalla is made with dJango and follows the MVT (Model-View-Template)  architecture. The frontend is created with html, css, jquery, and bootstrap.
 The platform is responsive and mobile-ready. 
