@@ -16,7 +16,7 @@ Musalla: An free and open-source online quiz platform.
 
 ## Tools and technologies ##
 
-![Logo](<img src="tools.JPG" alt="tools and technologies"  height="400">)
+<img src="tools.JPG" alt="tools and technologies"  height="400">
 Musalla is made with dJango and follows the MVT (Model-View-Template)  architecture. The frontend is created with html, css, jquery, and bootstrap.
 The platform is responsive and mobile-ready. 
 
