@@ -29,6 +29,7 @@
                 
             </div>
             <div class="col-lg-6 border border-dark">
+                <p>X-axis contains the number of participants and the bar denotes the % of partipants that got at least X% marks.</p>
                 <canvas id="bar-chart" width="800" height="450"></canvas>
             </div>
         </div>
@@ -50,7 +51,7 @@
         labels: chart_data['labels'],
         datasets: [
             {
-                label: "Participants who got at least this number",
+                label: "participants scored at least this percentage",
                 backgroundColor: colors,
                 data: chart_data['data']
             }

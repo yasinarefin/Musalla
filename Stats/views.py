@@ -54,10 +54,11 @@ def statistics_view(request, quiz_id):
     labels = []
     data = []
 
-    for i in range(20):
-        lab = total_points/ 25 * (i+1)
-        labels.append(str(int(lab)))
-        c = Submission.objects.filter(quiz=quiz_obj).values("user").annotate(Sum("points")).filter(points__sum__gte = lab).count()
+    for i in range(10):
+        lab = total_points * ((i+1) * 10 / 100) 
+        labels.append(str((i+1) * 10)+ "%")
+        c = Submission.objects.filter(quiz=quiz_obj).values("user").annotate(Sum("points")).filter(points__sum__gte = math.ceil(lab)).count()
+        
         data.append(c)
     
     max_points = Submission.objects.filter(quiz=quiz_obj).values("user").annotate(Sum("points")).aggregate(Max("points__sum")) 
@@ -75,6 +76,7 @@ def statistics_view(request, quiz_id):
             "total_participants": Submission.objects.filter(quiz=quiz_id).values("user__username").distinct().count(),
             "max_points":max_points["points__sum__max"]    ,
             "avg_points" : avg_points,
+            "total_points" : total_points,
             "chart_data": json.dumps({
                 "labels": labels,
                 "data" : data,
