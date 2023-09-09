@@ -24,6 +24,13 @@ The platform is responsive and mobile-ready.
 
 ![Musalla demo](demo.gif)
 
+## How to run in docker ##
+```
+docker build -t musalla:v1 .
+```
+```
+docker run -p 8000:8001 musalla:v1 (8000 can be replaced with your desired port)
+```
 ### Contribute ###
 
 As a free and open-source project, we are grateful to anyone who helps us develop this platform. Currently, the platform is still in an immature state, and there is only one contributor.
